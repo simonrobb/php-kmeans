@@ -51,6 +51,16 @@ class KMeans_Cluster
 		return $this;
 	}
 	
+	public function removeData($data)
+	{
+		if (($key = array_search($data, $this->_data)) !== false) {
+			
+			unset ($this->_data[$key]);
+		}
+		
+		return $this;
+	}
+	
 	public function updateCentroid()
 	{
 		if (!count($this->_data)) {

@@ -66,25 +66,33 @@ class KMeans
 	
 	private function _iterate()
 	{
-		$continue = true;
+		$continue = false;
 		
-		foreach ($this->_data as $point) {
+		foreach ($this->_clusters as $c) {
 			
-			$leastWcss = 2147483647;
-			$nearestCluster = null;
-			
-			foreach ($this->_clusters as $cluster) {
-			
-				$wcss = $this->_getWcss ($point, $cluster);
+			foreach ($c->getData() as $point) {
 				
-				if ($wcss < $leastWcss) {
+				$leastWcss = 2147483647;
+				$nearestCluster = null;
+				
+				foreach ($this->_clusters as $cluster) {
+
+					$wcss = $this->_getWcss($point, $cluster);
+
+					if ($wcss < $leastWcss) {
+
+						$leastWcss = $wcss;
+						$nearestCluster = $cluster;
+					}
+				}
+				
+				if ($nearestCluster != $c) {
 					
-					$leastWcss = $wcss;
-					$nearestCluster = $cluster;
+					$c->removeData($point);
+					$nearestCluster->addData($point);
+					$continue = true;
 				}
 			}
-			
-			$nearestCluster->addData ($point);
 		}
 
 		foreach ($this->_clusters as $cluster) {
@@ -92,7 +100,6 @@ class KMeans
 			$cluster->updateCentroid();
 		}
 		
-		$continue = false;
 		return $continue;
 	}
 	
@@ -111,6 +118,11 @@ class KMeans
 				->setY(mt_rand(0, $maxY));
 				
 			$this->_clusters[] = $cluster;
+		}
+		
+		if ($this->getConfig()->getClusterCount()) {
+			
+			$this->_clusters[0]->setData($this->_data);
 		}
 	}
 	

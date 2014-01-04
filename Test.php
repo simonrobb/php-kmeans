@@ -1,32 +1,24 @@
 <?php
 
-include_once ('kmeans.php');
+include_once ('KMeans.php');
 
 // form test data
-$data = [
-	array (
-		'foo'	=> 12,
-		'bar'	=> 8
-	),
-	array (
-		'foo'	=> 25,
-		'bar'	=> 16
-	),
-	array (
-		'foo'	=> 5,
-		'bar'	=> 24
-	),
-	array (
-		'foo'	=> 8,
-		'bar'	=> 23
-	)
-];
+$data = array();
+$fh = fopen(dirname(__FILE__) . '/TestData.csv', 'r');
 
+while(!feof($fh)) {
+	
+	$data[] = fgetcsv($fh, 1024);
+}
+fclose($fh);
+
+// perform analysis
 $kmeans = new KMeans();
-var_dump ($kmeans
+$kmeans
 	->setData ($data)
-	->setXKey ('foo')
-	->setYKey ('bar')
-	->setClusterCount (4)
-	->solve()
-	->toArray ());
+	->setXKey (0)
+	->setYKey (1)
+	->setClusterCount (2)
+	->solve();
+	
+var_dump ($kmeans->toArray ());
