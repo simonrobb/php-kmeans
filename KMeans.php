@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * KMeans.php
+ *
+ * Performs clustering analysis on data using the k-means clustering algorithm.
+ *
+ * Copyright (C) 2014 Simon Robb
+ *
+ * @package KMeans
+ * @author Simon Robb <simon@simonrobb.com.au>
+ * @link https://github.com.au/simonrobb/php-kmeans
+ */
+
 require('KMeans/Cluster.php');
 require('KMeans/Config.php');
 
@@ -9,35 +21,71 @@ class KMeans
 	private $_clusters = array();
 	private $_config;
 	
+	/**
+	 * Set the source data
+	 *
+	 * @param $data array
+	 * @return KMeans Implements fluent interface
+	 */
 	public function setData($data)
 	{
 		$this->_data = $data;
 		return $this;
 	}
 	
+	/**
+	 * Set the key in the source data corresponding to the value that should 
+	 * be used as the x-value in analysis
+	 *
+	 * @param $xKey mixed
+	 * @return KMeans Implements fluent interface
+	 */
 	public function setXKey($xKey)
 	{
 		$this->getConfig ()->setXKey($xKey);
 		return $this;
 	}
 	
+	/**
+	 * Set the key in the source data corresponding to the value that should 
+	 * be used as the y-value in analysis
+	 *
+	 * @param $yKey mixed
+	 * @return KMeans Implements fluent interface
+	 */
 	public function setYKey($yKey)
 	{
 		$this->getConfig ()->setYKey($yKey);
 		return $this;
 	}
 	
+	/**
+	 * Set the number of clusters to be used in the analysis
+	 *
+	 * @param $count int
+	 * @return KMeans Implements fluent interface
+	 */
 	public function setClusterCount($count)
 	{
 		$this->getConfig ()->setClusterCount($count);
 		return $this;
 	}
 	
+	/**
+	 * Get the clusters returned by the analysis
+	 *
+	 * @return array
+	 */
 	public function getClusters()
 	{
 		return $this->_clusters;
 	}
 	
+	/**
+	 * Get the config object for this analysis
+	 *
+	 * @return KMeans_Config
+	 */
 	public function getConfig()
 	{
 		if (!$this->_config) {
@@ -48,6 +96,11 @@ class KMeans
 		return $this->_config;
 	}
 	
+	/**
+	 * Returns analysis results as an array
+	 *
+	 * @return array
+	 */
 	public function toArray()
 	{
 		$result = array ();
@@ -60,6 +113,11 @@ class KMeans
 		return $result;
 	}
 	
+	/**
+	 * Perform analysis
+	 *
+	 * @return KMeans Implements fluent interface
+	 */
 	public function solve()
 	{
 		
@@ -69,6 +127,11 @@ class KMeans
 		return $this;
 	}
 	
+	/**
+	 * The guts of the algorithm
+	 *
+	 * @return bool True if another iteration should occur
+	 */
 	private function _iterate()
 	{
 		$continue = false;
@@ -108,6 +171,11 @@ class KMeans
 		return $continue;
 	}
 	
+	/**
+	 * Initialise clusters to begin analysis
+	 *
+	 * @return null
+	 */
 	private function _initialiseClusters()
 	{
 		$this->_clusters = array();
@@ -131,6 +199,11 @@ class KMeans
 		}
 	}
 	
+	/**
+	 * Get the x-bounds of the source data
+	 *
+	 * @return float
+	 */
 	private function _getMaxX()
 	{
 		$max = 0;
@@ -146,6 +219,11 @@ class KMeans
 		return $max;
 	}
 	
+	/**
+	 * Get the y-bounds of the source data
+	 *
+	 * @return float
+	 */
 	private function _getMaxY()
 	{
 		$max = 0;
@@ -161,6 +239,13 @@ class KMeans
 		return $max;
 	}
 	
+	/**
+	 * Get the within-cluster sum of squares for a data point/cluster centroid
+	 *
+	 * @param array $point An element from the source data
+	 * @param KMeans_Cluster $cluster A cluster to calculate the distance to
+	 * @return float
+	 */
 	private function _getWcss($point, $cluster)
 	{
 		
