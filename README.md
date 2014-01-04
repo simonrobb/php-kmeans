@@ -63,9 +63,14 @@ Note that the original data arrays are preserved, so in our example, we could do
 
 	// print names of the objects in the first cluster
 	$names = array();
-	foreach ($clusters[0] as $ra) {
+	foreach ($clusters[0]->getData() as $ra) {
 		$names[] = $ra['name'];
 	}
 	echo implode(', ', $names);
 
 Which would output <em>Foo, Bar</em>.
+
+License
+-------
+
+This library is released under the MIT license. You may use it in personal or commercial projects. For more information, see the <a href="https://github.com/simonrobb/php-kmeans/blob/master/LICENSE">license file</a>.
