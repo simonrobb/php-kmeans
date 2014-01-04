@@ -2,6 +2,9 @@
 
 include_once ('KMeans.php');
 
+$xKey = 0;
+$yKey = 1;
+
 // form test data
 $data = array();
 $fh = fopen(dirname(__FILE__) . '/TestData.csv', 'r');
@@ -16,9 +19,13 @@ fclose($fh);
 $kmeans = new KMeans();
 $kmeans
 	->setData ($data)
-	->setXKey (0)
-	->setYKey (1)
-	->setClusterCount (2)
+	->setXKey ($xKey)
+	->setYKey ($yKey)
+	->setClusterCount (3)
 	->solve();
 	
-var_dump ($kmeans->toArray ());
+$clusters = $kmeans->getClusters();
+foreach ($clusters as $cluster) {
+	
+	echo $cluster->getX() . ',' . $cluster->getY() . "\n\r";
+}

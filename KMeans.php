@@ -33,6 +33,11 @@ class KMeans
 		return $this;
 	}
 	
+	public function getClusters()
+	{
+		return $this->_clusters;
+	}
+	
 	public function getConfig()
 	{
 		if (!$this->_config) {
